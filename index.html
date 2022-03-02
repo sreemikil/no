@@ -1,0 +1,138 @@
+<HTML>
+<Head>
+<Body>
+<b>UDPS</b><br>
+import java.io.IOException;<br>
+import java.net.DatagramPacket;<br>
+import java.net.DatagramSocket;<br>
+import java.net.InetAddress;<br>
+import java.net.SocketException;<br>
+public class UDPServer {<br>
+	public static StringBuilder data(byte[] a){<br>
+    	if (a == null)<br>
+    		return null;<br>
+   		StringBuilder ret = new StringBuilder();<br>
+   		int i = 0;<br>
+   		while (a[i] != 0){<br>
+   			ret.append((char) a[i]);<br>
+   			i++;<br>
+   		}<br>
+   		return ret;<br>
+	}<br>
+	public static void main(String[] args) throws IOException{<br>
+		DatagramSocket ds = new DatagramSocket(6666);<br>
+        byte[] receive = new byte[65535];<br>
+        DatagramPacket DpReceive = null;<br>
+        while (true){<br>
+            DpReceive = new DatagramPacket(receive, receive.length);<br>
+            ds.receive(DpReceive);<br>
+            System.out.println("Client:-" + data(receive));<br>
+            if (data(receive).toString().equals("bye"))<br>
+            {<br>
+                System.out.println("Client sent bye.....EXITING");<br>
+                break;<br>
+            }<br>
+            receive = new byte[65535];<br>
+        }<br>
+    }<br>
+}<br>
+
+<b>UDPC</b><br>
+import java.io.IOException;<br>
+import java.net.DatagramPacket;<br>
+import java.net.DatagramSocket;<br>
+import java.net.InetAddress;<br>
+import java.util.Scanner;<br>
+public class UDPClient {<br>
+	public static void main(String args[]) throws IOException{<br>
+		Scanner sc = new Scanner(System.in);<br>
+		DatagramSocket ds = new DatagramSocket();<br>
+		InetAddress ip = InetAddress.getLocalHost();<br>
+		byte buf[] = null;<br>
+		while (true){<br>
+			String inp = sc.nextLine();<br>
+			buf = inp.getBytes();<br>
+			DatagramPacket DpSend = new DatagramPacket(buf, buf.length, ip, 6666);<br>
+			ds.send(DpSend);<br>
+			if (inp.equals("bye"))<br>
+				break;<br>
+		}<br>
+	}<br>
+}<br>
+
+<b>HC</b><br>
+class HammingCode {<br>
+	static void print(int ar[])<br>
+	{<br>
+		for (int i = 1; i < ar.length; i++) {<br>
+			System.out.print(ar[i]);<br>
+		}<br>
+		System.out.println();<br>
+	}<br>
+	static int[] calculation(int[] ar, int r)<br>
+	{<br>
+		for (int i = 0; i < r; i++) {<br>
+			int x = (int)Math.pow(2, i);<br>
+			for (int j = 1; j < ar.length; j++) {<br>
+				if (((j >> i) & 1) == 1) {<br>
+					if (x != j)<br>
+						ar[x] = ar[x] ^ ar[j];<br>
+				}<br>
+			}<br>
+			System.out.println("r" + x + " = "<br>
+							+ ar[x]);<br>
+		}<br>
+		return ar;<br>
+	}<br>
+	static int[] generateCode(String str, int M, int r)<br>
+	{<br>
+		int[] ar = new int[r + M + 1];<br>
+		int j = 0;<br>
+		for (int i = 1; i < ar.length; i++) {<br>
+			if ((Math.ceil(Math.log(i) / Math.log(2))<br>
+				- Math.floor(Math.log(i) / Math.log(2)))<br>
+				== 0) {<br>
+				ar[i] = 0;<br>
+			}<br>
+			else {<br>
+				// codeword[i] = dataword[j]<br>
+				ar[i] = (int)(str.charAt(j) - '0');<br>
+				j++;<br>
+			}<br>
+		}<br>
+		return ar;<br>
+	}<br>
+	public static void main(String[] args)<br>
+	{<br>
+		String str = "0101";<br>
+		int M = str.length();<br>
+		int r = 1;<br>
+		while (Math.pow(2, r) < (M + r + 1)) {<br>
+			r++;<br>
+		}<br>
+		int[] ar = generateCode(str, M, r);<br>
+		System.out.println("Generated hamming code ");<br>
+		ar = calculation(ar, r);<br>
+		print(ar);<br>
+	}<br>
+}<br>
+
+<b>T2W</b><br>
+while (true) {<br>
+			String str, str1;<br>
+			while ((str = br.readLine()) != null) {<br>
+				System.out.println(str);<br>
+				str1 = kb.readLine();<br>
+				ps.println(str1);<br>
+			}<br>
+			ps.close();<br>
+			br.close();<br>
+			kb.close();<br>
+			ss.close();<br>
+			s.close();<br>
+			System.exit(0);<br>
+
+</Body>
+</Head>
+</HTML>
+
